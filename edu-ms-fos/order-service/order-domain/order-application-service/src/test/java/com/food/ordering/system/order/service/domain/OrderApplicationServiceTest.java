@@ -8,18 +8,20 @@ import com.food.ordering.system.order.service.domain.entity.Customer;
 import com.food.ordering.system.order.service.domain.entity.Order;
 import com.food.ordering.system.order.service.domain.entity.Product;
 import com.food.ordering.system.order.service.domain.entity.Restaurant;
+import com.food.ordering.system.order.service.domain.exception.OrderDomainException;
 import com.food.ordering.system.order.service.domain.mapper.OrderDataMapper;
 import com.food.ordering.system.order.service.domain.ports.input.service.OrderApplicationService;
 import com.food.ordering.system.order.service.domain.ports.output.repository.CustomerRepository;
 import com.food.ordering.system.order.service.domain.ports.output.repository.OrderRepository;
 import com.food.ordering.system.order.service.domain.ports.output.repository.RestaurantRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -143,5 +145,53 @@ public class OrderApplicationServiceTest {
             .thenReturn(Optional.of(restaurantResponse));
         Mockito.when(orderRepository.save(Mockito.any(Order.class)))
             .thenReturn(order);
+    }
+
+    @Test
+    public void testCreateOrder() {
+        var createOrderResponse = orderApplicationService.createOrder(createOrderCommand);
+
+        Assertions.assertEquals(createOrderResponse.getOrderStatus(), OrderStatus.PENDING);
+        Assertions.assertEquals(createOrderResponse.getMessage().toLowerCase(), "order created successfully");
+        Assertions.assertNotNull(createOrderResponse.getOrderTrackingId());
+    }
+
+    @Test
+    public void testCreateOrderWithWrongTotalPrice() {
+        var orderDomainException = Assertions.assertThrows(
+            OrderDomainException.class,
+            () -> orderApplicationService.createOrder(createOrderCommandWrongPrice)
+        );
+        Assertions.assertEquals(orderDomainException.getMessage(), "Total price is not equal to order items price!");
+    }
+
+    @Test
+    public void testCreateOrderWithWrongProductPrice() {
+        var orderDomainException = Assertions.assertThrows(
+            OrderDomainException.class,
+            () -> orderApplicationService.createOrder(createOrderCommandWrongProductPrice)
+        );
+        Assertions.assertEquals(orderDomainException.getMessage(), "Order item price is not valid for product!");
+    }
+
+    @Test
+    public void testCreateOrderWithPassiveRestaurant() {
+        var restaurantResponse = Restaurant.builder()
+            .restaurantId(new RestaurantId(RESTAURANT_ID))
+            .products(List.of(
+                new Product(new ProductId(PRODUCT_ID), "product-1", new Money(new BigDecimal("50.00"))),
+                new Product(new ProductId(PRODUCT_ID), "product-2", new Money(new BigDecimal("50.00")))
+            )).active(false)
+            .build();
+
+        Mockito.when(restaurantRepository.findRestaurant(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)))
+            .thenReturn(Optional.of(restaurantResponse));
+
+        var orderDomainException = Assertions.assertThrows(
+            OrderDomainException.class,
+            () -> orderApplicationService.createOrder(createOrderCommand)
+        );
+
+        Assertions.assertEquals(orderDomainException.getMessage(), "Restaurant is currently not active!");
     }
 }
