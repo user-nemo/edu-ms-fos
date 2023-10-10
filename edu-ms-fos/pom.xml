@@ -17,20 +17,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>order-service</module>
-        <module>order-service/order-domain</module>
-        <module>order-service/order-application</module>
-        <module>order-service/order-dataaccess</module>
-        <module>order-service/order-messaging</module>
-        <module>order-service/order-container</module>
-        <module>order-service/order-domain/order-domain-core</module>
-        <module>order-service/order-domain/order-application-service</module>
         <module>common</module>
         <module>infrastructure</module>
-        <module>infrastructure/kafka</module>
-        <module>infrastructure/kafka/kafka-producer</module>
-        <module>infrastructure/kafka/kafka-consumer</module>
-        <module>infrastructure/kafka/kafka-model</module>
-        <module>infrastructure/kafka/kafka-config-data</module>
     </modules>
 
     <properties>
