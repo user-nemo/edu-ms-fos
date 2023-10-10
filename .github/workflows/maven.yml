@@ -27,8 +27,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: pwd
-      run: pwd
+    - name: Set Working Directory
+      run: cd edu-ms-fos
     - name: ls -la
       run: ls -la
     - name: Build with Maven
