@@ -25,6 +25,7 @@
         <module>order-service/order-domain/order-domain-core</module>
         <module>order-service/order-domain/order-application-service</module>
         <module>common</module>
+        <module>infrastructure</module>
     </modules>
 
     <properties>
