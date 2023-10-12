@@ -57,7 +57,7 @@ public class OrderCreateHelper {
     }
 
     private Restaurant checkRestaurant(Restaurant restaurant) {
-        Optional<Restaurant> optionalRestaurant = restaurantRepository.findRestaurant(restaurant);
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findRestaurantInformation(restaurant);
 
         if (optionalRestaurant.isEmpty()) {
             log.warn("Could not find restaurant with restaurant id: {}", restaurant.getId().getValue());

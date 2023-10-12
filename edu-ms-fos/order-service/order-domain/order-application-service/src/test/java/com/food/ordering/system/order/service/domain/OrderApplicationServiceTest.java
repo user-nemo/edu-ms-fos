@@ -141,7 +141,7 @@ public class OrderApplicationServiceTest {
 
         Mockito.when(customerRepository.findCustomer(CUSTOMER_ID))
             .thenReturn(Optional.of(customer));
-        Mockito.when(restaurantRepository.findRestaurant(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)))
+        Mockito.when(restaurantRepository.findRestaurantInformation(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)))
             .thenReturn(Optional.of(restaurantResponse));
         Mockito.when(orderRepository.save(Mockito.any(Order.class)))
             .thenReturn(order);
@@ -184,7 +184,7 @@ public class OrderApplicationServiceTest {
             )).active(false)
             .build();
 
-        Mockito.when(restaurantRepository.findRestaurant(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)))
+        Mockito.when(restaurantRepository.findRestaurantInformation(orderDataMapper.createOrderCommandToRestaurant(createOrderCommand)))
             .thenReturn(Optional.of(restaurantResponse));
 
         var orderDomainException = Assertions.assertThrows(
