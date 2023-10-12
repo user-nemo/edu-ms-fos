@@ -34,7 +34,7 @@ public class OrderEntity {
         cascade = CascadeType.ALL
     )
     private OrderAddressEntity address;
-    @OneToOne(
+    @OneToMany(
         mappedBy = "order",
         cascade = CascadeType.ALL
     )
