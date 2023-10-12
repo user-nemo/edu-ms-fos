@@ -14,7 +14,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(OrderItemEntityId.class)
 @Table(name = "orders")
 @Entity
 public class OrderEntity {
@@ -23,21 +22,15 @@ public class OrderEntity {
     private UUID customerId;
     private UUID restaurantId;
     private UUID trackingId;
-
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     private String failureMessages;
 
-    @OneToOne(
-        mappedBy = "order",
-        cascade = CascadeType.ALL
-    )
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private OrderAddressEntity address;
-    @OneToMany(
-        mappedBy = "order",
-        cascade = CascadeType.ALL
-    )
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItemEntity> items;
 
     @Override
@@ -45,7 +38,7 @@ public class OrderEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderEntity that = (OrderEntity) o;
-        return Objects.equals(id, that.id);
+        return id.equals(that.id);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class OrderAddressEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderAddressEntity that = (OrderAddressEntity) o;
-        return Objects.equals(id, that.id);
+        return id.equals(that.id);
     }
 
     @Override

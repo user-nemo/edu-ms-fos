@@ -12,6 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(OrderItemEntityId.class)
 @Table(name = "order_items")
 @Entity
 public class OrderItemEntity {
@@ -32,7 +33,7 @@ public class OrderItemEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItemEntity that = (OrderItemEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(order, that.order);
+        return id.equals(that.id) && order.equals(that.order);
     }
 
     @Override
